@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AegeanLogs.Api/AegeanLogs.Api.csproj" />
+    <Project Path="src/AegeanLogs.Application/AegeanLogs.Application.csproj" />
+    <Project Path="src/AegeanLogs.Domain/AegeanLogs.Domain.csproj" />
+    <Project Path="src/AegeanLogs.Infrastructure/AegeanLogs.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AegeanLogs.IntegrationTests/AegeanLogs.IntegrationTests.csproj" />
+    <Project Path="tests/AegeanLogs.UnitTests/AegeanLogs.UnitTests.csproj" />
+  </Folder>
+</Solution>
