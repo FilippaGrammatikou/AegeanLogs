@@ -1,5 +1,6 @@
-﻿namespace AegeanLogs.Api.Extensions;
+namespace AegeanLogs.Api.Extensions;
 
+//CORS setup
 public class CorsExtensions
 {
 }
