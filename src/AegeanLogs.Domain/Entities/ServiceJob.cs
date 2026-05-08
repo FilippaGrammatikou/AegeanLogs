@@ -16,13 +16,20 @@ public class ServiceJob
     public Supplier? Supplier { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public bool IsRequired { get; set; }
+
+
+    public ServiceRequirementLevel RequirementLevel { get; set; }
+    public ReadinessImpact ReadinessImpact { get; set; }
+
     public DateTimeOffset Deadline { get; set; }
     public ServiceJobStatus Status { get; set; } = ServiceJobStatus.Requested;
     public string? SupplierNotes { get; set; }
     public string? EvidenceFileName { get; set; }
+
     public DateTimeOffset? StartedAt { get; set; }
     public DateTimeOffset? CompletedAt { get; set; }
+    public DateTimeOffset? CheckedAt { get; set; }
+
     public int? CheckedByUserId { get; set; }
     public ApplicationUser? CheckedByUser { get; set; }
 }
