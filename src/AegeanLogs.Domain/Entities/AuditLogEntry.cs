@@ -8,11 +8,12 @@ namespace AegeanLogs.Domain.Entities;
 public class AuditLogEntry
 {
     public int Id { get; set; }
-    public int PortCall { get; set; }
+    public int PortCallId { get; set; }
     public PortCall PortCall { get; set; } = null!;
     public int? UserId { get; set; }
     public ApplicationUser? User { get; set; }
     public AuditActionType ActionType { get; set; }
+    public string EntityName { get; set; } = string.Empty;
     public string EntityId { get; set; }
     public string? OldValue { get; set; }
     public string? NewValue { get; set; }
