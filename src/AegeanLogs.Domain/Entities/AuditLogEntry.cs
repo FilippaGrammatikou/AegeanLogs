@@ -1,9 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using AegeanLogs.Domain.Enums;
 
 namespace AegeanLogs.Domain.Entities;
 
-internal class AuditLogEntry
+public class AuditLogEntry
 {
+    public int Id { get; set; }
+    public int PortCall { get; set; }
+    public PortCall PortCall { get; set; } = null!;
+    public int? UserId { get; set; }
+    public ApplicationUser? User { get; set; }
+    public AuditActionType ActionType { get; set; }
+    public string EntityId { get; set; }
+    public string? OldValue { get; set; }
+    public string? NewValue { get; set; }
+    public string Summary { get; set; } = string.Empty;
+    public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
 }
