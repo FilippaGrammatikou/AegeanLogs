@@ -1,9 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AegeanLogs.Domain.Enums;
-
-internal class ServiceJobStatus
+public enum ServiceJobStatus
 {
+    Requested,
+    Assigned,
+    InProgress,
+    Done,
+    Checked,
+    Blocked,
+    Late,
+    Cancelled
 }
