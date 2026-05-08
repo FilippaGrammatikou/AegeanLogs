@@ -1,9 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AegeanLogs.Domain.Enums;
-
-internal class AuditActionType
+public enum AuditActionType
 {
+    PortCallCreated,
+    PortCallStatusChanged,
+    ServiceJobCreated,
+    SupplierAssigned,
+    ServiceJobStatusChanged,
+    DocumentCreated,
+    DocumentUploaded,
+    DocumentChecked,
+    DocumentRejected,
+    ReadinessEvaluated,
+    PortCallClosed,
+    PortCallCancelled
 }
