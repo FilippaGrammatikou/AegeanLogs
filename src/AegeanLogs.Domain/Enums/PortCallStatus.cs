@@ -1,9 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AegeanLogs.Domain.Enums;
-
-internal class PortCallStatus
+public enum PortCallStatus
 {
+    Expected,
+    Arrived,
+    WorkInProgress,
+    ReadyToLeave,
+    Departed,
+    Closed,
+    Cancelled
 }
