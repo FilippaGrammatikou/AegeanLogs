@@ -11,7 +11,8 @@ public class ApplicationUser
     public string DisplayName { get; set;  } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
-    public int? Supplier { get; set; }
+    public int? SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
     public int? ClientCompanyId { get; set; }
     public ClientCompany? ClientCompany { get; set; }
     public bool IsActive { get; set; } = true;
