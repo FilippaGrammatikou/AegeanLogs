@@ -19,7 +19,7 @@ public class ServiceType
     public bool RequiresCompletionEvidence { get; set; }
 
  
-    public bool isActive { get; set; } = true;
+    public bool IsActive { get; set; } = true;
 
     public List<ServiceJob> ServiceJobs { get; set; } = [];
     public List<ServiceRequirementRule> ServiceRequirements { get; set; } = []; 
