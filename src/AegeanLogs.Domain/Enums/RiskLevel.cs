@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AegeanLogs.Domain.Enums;
-
-internal class RiskLevel
+public enum RiskLevel
 {
+    Low,
+    Medium,
+    High,
+    Critical
 }
