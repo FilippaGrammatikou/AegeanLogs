@@ -22,5 +22,5 @@ public class ServiceType
     public bool IsActive { get; set; } = true;
 
     public List<ServiceJob> ServiceJobs { get; set; } = [];
-    public List<ServiceRequirementRule> ServiceRequirements { get; set; } = []; 
+    public List<ServiceRequirementRule> RequirementRules { get; set; } = []; 
 }
