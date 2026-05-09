@@ -65,7 +65,7 @@ public class ReadinessEngine
         return new ReadinessResult
         {
             Score = score,
-            Risklevel = riskLevel,
+            RiskLevel = riskLevel,
             CanMoveToReadyToLeave = !blockers.Any(b => b.IsCritical),
             CanClose = portCall.Status == PortCallStatus.Departed
                        && !blockers.Any(b => b.IsCritical),
