@@ -18,5 +18,5 @@ public class AuditLogEntry
     public string? OldValue { get; set; }
     public string? NewValue { get; set; }
     public string Summary { get; set; } = string.Empty;
-    public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }
