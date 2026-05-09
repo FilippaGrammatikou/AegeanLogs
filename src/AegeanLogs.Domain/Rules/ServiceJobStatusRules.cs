@@ -27,7 +27,7 @@ public static class ServiceJobStatusRules
             ServiceJobStatus.Done => nextStatus is ServiceJobStatus.Checked
                                                        or ServiceJobStatus.Blocked,
             
-            ServiceJobStatus.Checked =>false,
+            ServiceJobStatus.Checked =>false,//no further progression from this state for this service jobs status
 
             ServiceJobStatus.Blocked => nextStatus is ServiceJobStatus.Assigned
                                                             or ServiceJobStatus.InProgress
@@ -37,8 +37,8 @@ public static class ServiceJobStatusRules
                                                       or ServiceJobStatus.Done
                                                       or ServiceJobStatus.Cancelled,
 
-            ServiceJobStatus.Cancelled => false,
-            _=> false
+            ServiceJobStatus.Cancelled => false, //no further progression from this state for this service jobs status
+            _ => false
         };
     }
 }
