@@ -14,7 +14,7 @@ public class AuditLogEntry
     public ApplicationUser? User { get; set; }
     public AuditActionType ActionType { get; set; }
     public string EntityName { get; set; } = string.Empty;
-    public string EntityId { get; set; }
+    public int EntityId { get; set; }
     public string? OldValue { get; set; }
     public string? NewValue { get; set; }
     public string Summary { get; set; } = string.Empty;
