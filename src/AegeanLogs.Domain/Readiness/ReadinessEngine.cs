@@ -13,6 +13,7 @@ public class ReadinessEngine
     {
         var blockers = new List<ReadinessBlocker>();
 
+        //Checks service jobs that can block readiness or closure
         foreach (var job in portCall.ServiceJobs)
         {
             if (job.ReadinessImpact is ReadinessImpact.BlocksReadyToLeave
@@ -33,6 +34,7 @@ public class ReadinessEngine
             }
         }
 
+        //Check required documents that have not been approved
         foreach (var document in portCall.Documents.Where(d => d.IsRequired))
         {
             if (document.Status != DocumentStatus.Checked)
@@ -49,6 +51,7 @@ public class ReadinessEngine
             }
         }
 
+        //Reduce readiness score for each blocker
         var score = Math.Max(0, 100 - blockers.Count * 20);
 
         var riskLevel = score switch
@@ -62,7 +65,7 @@ public class ReadinessEngine
         return new ReadinessResult
         {
             Score = score,
-            RiskLevel = riskLevel,
+            Risklevel = riskLevel,
             CanMoveToReadyToLeave = !blockers.Any(b => b.IsCritical),
             CanClose = portCall.Status == PortCallStatus.Departed
                        && !blockers.Any(b => b.IsCritical),
