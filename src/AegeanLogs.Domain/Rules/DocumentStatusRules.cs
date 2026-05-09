@@ -17,7 +17,7 @@ public static class DocumentStatusRules
             DocumentStatus.Uploaded => nextStatus is DocumentStatus.Checked or DocumentStatus.Rejected
                                                              or DocumentStatus.Missing,
 
-            DocumentStatus.Checked => false,
+            DocumentStatus.Checked => false, //no further progression from this state for this status
             DocumentStatus.Missing => nextStatus is DocumentStatus.Uploaded,
             DocumentStatus.Rejected => nextStatus is DocumentStatus.Uploaded or DocumentStatus.Missing,
 
