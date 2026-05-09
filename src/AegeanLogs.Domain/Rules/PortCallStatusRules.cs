@@ -18,8 +18,8 @@ public static class PortCallStatusRules
             PortCallStatus.ReadyToLeave => nextStatus is PortCallStatus.Departed,
             PortCallStatus.Departed => nextStatus is PortCallStatus.Closed,
 
-            PortCallStatus.Closed => false,
-            PortCallStatus.Cancelled => false,
+            PortCallStatus.Closed => false,  //no further progression from this state for this port call status
+            PortCallStatus.Cancelled => false,  //no further progression from this state for this port call status
             _ => false
         };
     }
