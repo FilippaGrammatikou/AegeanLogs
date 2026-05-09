@@ -10,5 +10,5 @@ public class ReadinessResult
     public RiskLevel Risklevel { get; set; }
     public bool CanMoveToReadyToLeave { get; set; }
     public bool CanClose { get; set;  }
-    public List<ReadinessBlocker> Blocker { get; set; } = [];
+    public List<ReadinessBlocker> Blockers { get; set; } = [];
 }
