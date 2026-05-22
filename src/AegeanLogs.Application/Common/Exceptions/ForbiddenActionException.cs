@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace AegeanLogs.Application.Common.Exceptions;
-
-internal class ForbiddenActionException
+public class ForbiddenActionException : Exception
 {
+    public ForbiddenActionException(string message) : base(message)
+    {
+    }
 }
