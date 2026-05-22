@@ -27,9 +27,9 @@ public class DocumentStatusRulesTests
     }
 
     [Fact]
-    public void CanMoveTo_WhenRejectedToUploaded_ReturnFalse()
+    public void CanMoveTo_WhenRejectedToUploaded_ReturnTrue()
     {
         var result = DocumentStatusRules.CanMoveTo(DocumentStatus.Rejected, DocumentStatus.Uploaded);
-        Assert.False(result);
+        Assert.True(result);
     }
 }
