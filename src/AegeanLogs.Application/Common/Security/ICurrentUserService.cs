@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace AegeanLogs.Application.Common.Security;
 
-internal class ICurrentUserService
+public interface ICurrentUserService
 {
+    int? UserId { get; }
+    string? Role { get; }
+    int? SupplierId{ get; }
+    int? ClientCompanyId { get; }
 }
