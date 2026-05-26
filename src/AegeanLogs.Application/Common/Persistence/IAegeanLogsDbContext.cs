@@ -8,11 +8,12 @@ public interface IAegeanLogsDbContext
     DbSet<ClientCompany> ClientCompanies { get;}
     DbSet<Vessel> Vessels { get;}
     DbSet<Port> Ports { get;}
-    DbSet<PortCall> PortCalls { get; }
+    DbSet<PortCall>PortCalls { get; }
     DbSet<ServiceType> ServiceTypes { get; }
     DbSet<ServiceRequirementRule> ServiceRequirementRules { get; }
     DbSet<Supplier>Suppliers { get;}
     DbSet<ServiceJob> ServiceJobs { get;}
     DbSet<PortCallDocument>PortCallDocuments { get;}
     DbSet<AuditLogEntry>AuditLogEntries { get; }
+    Task<int>SaveChangesAsync(CancellationToken cancellationToken = default);
 }
