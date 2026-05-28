@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AegeanLogs.Infrastructure.Persistence.Configurations;
-
 public class ServiceTypeConfiguration : IEntityTypeConfiguration<ServiceType>
 {
     public void Configure(EntityTypeBuilder<ServiceType> builder)
