@@ -14,7 +14,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(supplier => supplier.Name).IsRequired().HasMaxLength(200);
         builder.Property(supplier => supplier.ServiceCategory).IsRequired().HasConversion<string>().HasMaxLength(100);
         builder.Property(supplier => supplier.ContactEmail).IsRequired().HasMaxLength(256);
-        builder.Property(supplier => supplier.PhoneNumber).IsRequired().HasMaxLength(20);
+        builder.Property(supplier => supplier.PhoneNumber).HasMaxLength(20);
 
         builder.HasIndex(supplier => supplier.Name).IsUnique();
         builder.HasIndex(supplier => supplier.ServiceCategory);
