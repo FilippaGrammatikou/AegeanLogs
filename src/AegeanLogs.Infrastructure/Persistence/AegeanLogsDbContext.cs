@@ -2,7 +2,7 @@ using AegeanLogs.Application.Common.Persistence;
 using AegeanLogs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AegeanLogs.Application.Common.Persistence;
+namespace AegeanLogs.Application.Persistence;
 public class AegeanLogsDbContext : DbContext, IAegeanLogsDbContext
 {
     public AegeanLogsDbContext(DbContextOptions<AegeanLogsDbContext> options) : base(options)
