@@ -12,8 +12,10 @@ public class PortCallConfiguration : IEntityTypeConfiguration<PortCall>
 
         builder.HasKey(portCall => portCall.Id);
 
-        builder.Property(portCall => portCall.Purpose).IsRequired().HasConversion<String>().HasMaxLength(150);
+        builder.Property(portCall => portCall.Purpose).IsRequired().HasConversion<string>().HasMaxLength(150);
+        builder.Property(portCall => portCall.Status).IsRequired().HasConversion<string>().HasMaxLength(80);
         builder.Property(portCall => portCall.Eta).IsRequired();
+        builder.Property(portCall => portCall.Etd).IsRequired();
         builder.Property(portCall => portCall.Notes).HasMaxLength(1000);
         builder.Property(portCall => portCall.CreatedAt).IsRequired();
 
@@ -30,7 +32,7 @@ public class PortCallConfiguration : IEntityTypeConfiguration<PortCall>
         builder.HasIndex(portCall => portCall.AssignedAgentUserId);
 
         builder.HasOne(portCall => portCall.Vessel).WithMany(vessel => vessel.PortCalls)
-                                                                                .HasForeignKey(PortCall => PortCall.VesselId)
+                                                                                .HasForeignKey(portCall => portCall.VesselId)
                                                                                 .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(portCall => portCall.Port).WithMany(port => port.PortCalls)
