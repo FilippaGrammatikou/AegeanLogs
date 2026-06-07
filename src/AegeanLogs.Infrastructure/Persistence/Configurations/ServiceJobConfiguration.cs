@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AegeanLogs.Infrastructure.Persistence.Configurations;
-
 public class ServiceJobConfiguration : IEntityTypeConfiguration<ServiceJob>
 {
     public void Configure(EntityTypeBuilder<ServiceJob> builder)
@@ -13,7 +12,7 @@ public class ServiceJobConfiguration : IEntityTypeConfiguration<ServiceJob>
         builder.HasKey(serviceJob => serviceJob.Id);
 
         builder.Property(serviceJob => serviceJob.Title).IsRequired().HasMaxLength(200);
-        builder.Property(serviceJob => serviceJob.Description).IsRequired().HasMaxLength(1000);
+        builder.Property(serviceJob => serviceJob.Description).HasMaxLength(1000);
         builder.Property(serviceJob => serviceJob.RequirementLevel).IsRequired().HasConversion<string>().HasMaxLength(80);
         builder.Property(serviceJob => serviceJob.ReadinessImpact).IsRequired().HasConversion<string>().HasMaxLength(80);
         builder.Property(serviceJob => serviceJob.Status).IsRequired().HasConversion<string>().HasMaxLength(80);
