@@ -4,6 +4,7 @@ using AegeanLogs.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AegeanLogs.Infrastructure.Migrations
 {
     [DbContext(typeof(AegeanLogsDbContext))]
-    partial class AegeanLogsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607173828_FixPersistenceMappingDetails")]
+    partial class FixPersistenceMappingDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
