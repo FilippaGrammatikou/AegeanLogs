@@ -16,6 +16,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         builder.Property(user => user.PasswordHash).IsRequired().HasMaxLength(500);
         builder.Property(user => user.Role).IsRequired().HasMaxLength(40);
         builder.Property(user => user.CreatedAt).IsRequired();
+        builder.HasIndex(user => user.Email).IsUnique();
 
         builder.HasIndex(user => user.Role);
         builder.HasIndex(user => user.SupplierId);
