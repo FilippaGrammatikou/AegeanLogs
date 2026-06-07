@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AegeanLogs.Infrastructure.Persistence.Configurations;
-public class ApplictionUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
+public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
@@ -24,8 +24,8 @@ public class ApplictionUserConfiguration : IEntityTypeConfiguration<ApplicationU
         builder.HasOne(user => user.Supplier).WithMany(supplier => supplier.Users)
                                                                        .HasForeignKey(user => user.SupplierId).OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(user => user.ClientCompany).WithMany(ClientCompany => ClientCompany.Users)
-                                                                                  .HasForeignKey(user => user.ClientCompany)
+        builder.HasOne(user => user.ClientCompany).WithMany(clientCompany => clientCompany.Users)
+                                                                                  .HasForeignKey(user => user.ClientCompanyId)
                                                                                   .OnDelete(DeleteBehavior.Restrict);
 
     }
