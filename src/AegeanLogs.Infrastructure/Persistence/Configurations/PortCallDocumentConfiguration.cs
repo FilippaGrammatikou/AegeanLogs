@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Metadata;
 
 namespace AegeanLogs.Infrastructure.Persistence.Configurations;
-
 public class PortCallDocumentConfiguration : IEntityTypeConfiguration<PortCallDocument>
 {
     public void Configure(EntityTypeBuilder<PortCallDocument> builder)
@@ -29,11 +28,11 @@ public class PortCallDocumentConfiguration : IEntityTypeConfiguration<PortCallDo
                                                                                        .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(document => document.UploadedByUser).WithMany()
-                                                                                       .HasForeignKey(document => document.UploadedByUser)
+                                                                                       .HasForeignKey(document => document.UploadedByUserId)
                                                                                        .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(document => document.CheckedByUser).WithMany()
-                                                                                       .HasForeignKey(document => document.CheckedByUser)
+                                                                                       .HasForeignKey(document => document.CheckedByUserId)
                                                                                        .OnDelete(DeleteBehavior.Restrict);
     }
 }
