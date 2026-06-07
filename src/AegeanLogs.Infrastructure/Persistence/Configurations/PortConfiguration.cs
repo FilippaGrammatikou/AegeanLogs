@@ -14,7 +14,7 @@ public class PortConfiguration : IEntityTypeConfiguration<Port>
 
         builder.Property(port => port.Name).IsRequired().HasMaxLength(200);
         builder.Property(port => port.Country).IsRequired().HasMaxLength(100);
-        builder.Property(port => port.Country).IsRequired().HasMaxLength(20);
+        builder.Property(port => port.UnLocode).IsRequired().HasMaxLength(20);
 
         builder.HasIndex(port => port.UnLocode).IsUnique();
 
