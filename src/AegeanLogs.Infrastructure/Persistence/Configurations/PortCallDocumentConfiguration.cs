@@ -1,7 +1,6 @@
 using AegeanLogs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Metadata;
 
 namespace AegeanLogs.Infrastructure.Persistence.Configurations;
 public class PortCallDocumentConfiguration : IEntityTypeConfiguration<PortCallDocument>
@@ -15,7 +14,7 @@ public class PortCallDocumentConfiguration : IEntityTypeConfiguration<PortCallDo
         builder.Property(document => document.DocumentType).IsRequired().HasMaxLength(100);
         builder.Property(document => document.FileName).HasMaxLength(300);
         builder.Property(document=> document.Status).IsRequired().HasConversion<string>().HasMaxLength(100);
-        builder.Property(document => document.RejectionReason).IsRequired().HasMaxLength(1000);
+        builder.Property(document => document.RejectionReason).HasMaxLength(1000);
 
         builder.HasIndex(document => document.PortCallId);
         builder.HasIndex(document => document.Status);
