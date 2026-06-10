@@ -10,16 +10,12 @@ public static class SeedData
         [
             new Port
             {Name = "Piraeus", Country = "Greece", UnLocode = "GRPIR", IsActive = true},
-
             new Port
             {Name = "Elefsina", Country = "Greece", UnLocode = "GRELE", IsActive = true},
-
             new Port
             {Name = "Lavrio", Country = "Greece", UnLocode = "GRLAV",IsActive = true},
-
             new Port
             {Name = "Thessaloniki", Country = "Greece", UnLocode = "GRSKG", IsActive = true},
-
             new Port
             {Name = "Heraklion", Country = "Greece", UnLocode = "GRHER", IsActive = true}
         ];
