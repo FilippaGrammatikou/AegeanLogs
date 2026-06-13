@@ -1,5 +1,6 @@
-namespace AegeanLogs.Application.Common.Security;
+using AegeanLogs.Domain.Enums;
 
+namespace AegeanLogs.Application.Common.Security;
 public interface ICurrentUserService
 {
     int? UserId { get; }
