@@ -112,7 +112,7 @@ public static class DatabaseSeeder
                 Email = "admin@aegeanlogs.local",
                 DisplayName = "Demo Admin",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "Admin",
+                Role = UserRole.Admin,
                 IsActive = true},
 
             new()
@@ -120,7 +120,7 @@ public static class DatabaseSeeder
                 Email = "agent@aegeanlogs.local",
                 DisplayName = "Demo Port Agent",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "PortAgent",
+                Role = UserRole.PortAgent,
                 IsActive = true},
 
             new()
@@ -128,7 +128,7 @@ public static class DatabaseSeeder
                 Email = "docs@aegeanlogs.local",
                 DisplayName = "Demo Documentation Officer",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "DocumentationOfficer",
+                Role = UserRole.DocumentationOfficer,
                 IsActive = true},
 
             new()
@@ -136,7 +136,7 @@ public static class DatabaseSeeder
                 Email = "manager@aegeanlogs.local",
                 DisplayName = "Demo Operations Manager",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "OperationsManager",
+                Role = UserRole.OperationsManager,
                 IsActive = true},
 
             new()
@@ -144,7 +144,7 @@ public static class DatabaseSeeder
                 Email = "supplier@aegeanlogs.local",
                 DisplayName = "Demo Supplier User",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "SupplierUser",
+                Role = UserRole.SupplierUser,
                 SupplierId = supplier.Id,
                 IsActive = true},
 
@@ -153,7 +153,7 @@ public static class DatabaseSeeder
                 Email = "client@aegeanlogs.local",
                 DisplayName = "Demo Client User",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
-                Role = "ClientUser",
+                Role = UserRole.ClientUser,
                 ClientCompanyId = clientCompany.Id,
                 IsActive = true}
         };
