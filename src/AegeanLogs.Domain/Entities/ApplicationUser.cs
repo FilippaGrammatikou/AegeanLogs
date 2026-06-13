@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AegeanLogs.Domain.Enums;
 using System.Text;
 
 namespace AegeanLogs.Domain.Entities;
@@ -10,7 +11,7 @@ public class ApplicationUser
     public string Email { get; set; } = string.Empty;
     public string DisplayName { get; set;  } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty;
+    public UserRole Role { get; set; }
     public int? SupplierId { get; set; }
     public Supplier? Supplier { get; set; }
     public int? ClientCompanyId { get; set; }
