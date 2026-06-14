@@ -27,18 +27,23 @@ public static class DatabaseSeeder
             return;
         }
 
-        dbContext.Ports.AddRange(SeedData.Ports());
+        dbContext.Ports.AddRange(missingPorts);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private static async Task SeedServiceTypesAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
     {
-        if (await dbContext.ServiceTypes.AnyAsync(cancellationToken))
+
+        var existingCodes = await dbContext.ServiceTypes.AsNoTracking().Select(serviceType => serviceType.Code).ToListAsync(cancellationToken);
+        var existingCodeSet = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingServiceTypes = SeedData.ServiceTypes().Where(serviceType=> !existingCodeSet.Contains(serviceType.Code)).ToList();
+
+        if(missingServiceTypes.Count == 0)
         {
             return;
         }
 
-        dbContext.ServiceTypes.AddRange(SeedData.ServiceTypes());
+        dbContext.ServiceTypes.AddRange(missingServiceTypes);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
