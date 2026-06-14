@@ -3,24 +3,27 @@ using AegeanLogs.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AegeanLogs.Infrastructure.Persistence.Seed;
+
 public static class DatabaseSeeder
 {
-    public static async Task SeedAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken = default)
+    public static async Task SeedAsync(
+        AegeanLogsDbContext dbContext,
+        CancellationToken cancellationToken = default)
     {
         await SeedPortsAsync(dbContext, cancellationToken);
         await SeedServiceTypesAsync(dbContext, cancellationToken);
-        await SeedClientCompaniesAndVesselsAsync(dbContext, cancellationToken);
-        await SeedClientCompaniesAndVesselsAsync(dbContext, cancellationToken);
+        await SeedClientCompaniesAsync(dbContext, cancellationToken);
+        await SeedVesselsAsync(dbContext, cancellationToken);
         await SeedSuppliersAsync(dbContext, cancellationToken);
         await SeedUsersAsync(dbContext, cancellationToken);
         await SeedServiceRequirementRulesAsync(dbContext, cancellationToken);
     }
 
-    private static async Task SeedPortsAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task SeedPortsAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
         var existingUnLocodes = await dbContext.Ports.AsNoTracking().Select(port => port.UnLocode).ToListAsync(cancellationToken);
         var existingUnLocodeSet = existingUnLocodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var missingPorts = SeedData.Ports().Where(port=> !existingUnLocodeSet.Contains(port.UnLocode)).ToList();
+        var missingPorts = SeedData.Ports().Where(port => !existingUnLocodeSet.Contains(port.UnLocode)).ToList();
 
         if (missingPorts.Count == 0)
         {
@@ -31,14 +34,13 @@ public static class DatabaseSeeder
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private static async Task SeedServiceTypesAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task SeedServiceTypesAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-
         var existingCodes = await dbContext.ServiceTypes.AsNoTracking().Select(serviceType => serviceType.Code).ToListAsync(cancellationToken);
         var existingCodeSet = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var missingServiceTypes = SeedData.ServiceTypes().Where(serviceType=> !existingCodeSet.Contains(serviceType.Code)).ToList();
+        var missingServiceTypes = SeedData.ServiceTypes().Where(serviceType => !existingCodeSet.Contains(serviceType.Code)).ToList();
 
-        if(missingServiceTypes.Count == 0)
+        if (missingServiceTypes.Count == 0)
         {
             return;
         }
@@ -47,75 +49,99 @@ public static class DatabaseSeeder
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private static async Task SeedClientCompaniesAndVesselsAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task SeedClientCompaniesAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        if (await dbContext.ClientCompanies.AnyAsync(cancellationToken))
+        var existingNames = await dbContext.ClientCompanies.AsNoTracking().Select(company => company.Name).ToListAsync(cancellationToken);
+        var existingNameSet = existingNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingCompanies = SeedData.ClientCompanies().Where(company => !existingNameSet.Contains(company.Name)).ToList();
+
+        if (missingCompanies.Count == 0)
         {
             return;
         }
 
-        var clientCompanies = SeedData.ClientCompanies();
-        dbContext.ClientCompanies.AddRange(clientCompanies);
+        dbContext.ClientCompanies.AddRange(missingCompanies);
         await dbContext.SaveChangesAsync(cancellationToken);
-        var aegeanBlue = await dbContext.ClientCompanies.SingleAsync(company => company.Name == "Aegean Blue Shipping Ltd", cancellationToken);
-        var hellenicBulk = await dbContext.ClientCompanies.SingleAsync(company => company.Name == "Hellenic Bulk Operators", cancellationToken);
+    }
 
-        var vessels = new List<Vessel>
+    private static async Task SeedVesselsAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
+    {
+        var companyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Name}).ToListAsync(cancellationToken);
+        var companyIdsByName = companyRecords.ToDictionary(company => company.Name,company => company.Id,StringComparer.OrdinalIgnoreCase);
+        var aegeanBlueCompanyId = GetRequiredId(companyIdsByName,"Aegean Blue Shipping Ltd","client company");
+        var hellenicBulkCompanyId = GetRequiredId(companyIdsByName,"Hellenic Bulk Operators","client company");
+
+        var intendedVessels = new List<Vessel>
         {
             new()
             {
-                ClientCompanyId = aegeanBlue.Id,
+                ClientCompanyId = aegeanBlueCompanyId,
                 Name = "MV Aegean Star",
                 ImoNumber = "IMO9300001",
                 VesselType = "Container Ship",
                 Flag = "Greece",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
-                ClientCompanyId = aegeanBlue.Id,
+                ClientCompanyId = aegeanBlueCompanyId,
                 Name = "MV Cyclades Trader",
                 ImoNumber = "IMO9300002",
                 VesselType = "Bulk Carrier",
                 Flag = "Malta",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
-                ClientCompanyId = hellenicBulk.Id,
+                ClientCompanyId = hellenicBulkCompanyId,
                 Name = "MV Thermaikos",
                 ImoNumber = "IMO9300003",
                 VesselType = "Bulk Carrier",
                 Flag = "Greece",
-                IsActive = true}
+                IsActive = true
+            }
         };
 
-        dbContext.Vessels.AddRange(vessels);
-        await dbContext.SaveChangesAsync(cancellationToken);
-    }
+        var existingImoNumbers = await dbContext.Vessels.AsNoTracking().Select(vessel => vessel.ImoNumber).ToListAsync(cancellationToken);
+        var existingImoNumberSet = existingImoNumbers.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingVessels = intendedVessels.Where(vessel => !existingImoNumberSet.Contains(vessel.ImoNumber)).ToList();
 
-    private static async Task SeedSuppliersAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
-    {
-        if (await dbContext.Suppliers.AnyAsync(cancellationToken))
+        if (missingVessels.Count == 0)
         {
             return;
         }
 
-        dbContext.Suppliers.AddRange(SeedData.Suppliers());
+        dbContext.Vessels.AddRange(missingVessels);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private static async Task SeedUsersAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task SeedSuppliersAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        if (await dbContext.ApplicationUsers.AnyAsync(cancellationToken))
+        var existingNames = await dbContext.Suppliers.AsNoTracking().Select(supplier => supplier.Name).ToListAsync(cancellationToken);
+        var existingNameSet = existingNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingSuppliers = SeedData.Suppliers().Where(supplier => !existingNameSet.Contains(supplier.Name)).ToList();
+
+        if (missingSuppliers.Count == 0)
         {
             return;
         }
 
-        var clientCompany = await dbContext.ClientCompanies.SingleAsync(company => company.Name == "Aegean Blue Shipping Ltd", cancellationToken);
-        var supplier = await dbContext.Suppliers.SingleAsync(supplier => supplier.Name == "Piraeus Marine Supplies", cancellationToken);
+        dbContext.Suppliers.AddRange(missingSuppliers);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
 
-        var users = new List<ApplicationUser>
+    private static async Task SeedUsersAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
+    {
+        var clientCompanyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Name}).ToListAsync(cancellationToken);
+        var clientCompanyIdsByName = clientCompanyRecords.ToDictionary(company => company.Name,company => company.Id,StringComparer.OrdinalIgnoreCase);
+        var supplierRecords = await dbContext.Suppliers.AsNoTracking().Select(supplier => new{supplier.Id,supplier.Name}).ToListAsync(cancellationToken);
+        var supplierIdsByName = supplierRecords.ToDictionary(supplier => supplier.Name,supplier => supplier.Id,StringComparer.OrdinalIgnoreCase);
+        var clientCompanyId = GetRequiredId(clientCompanyIdsByName,"Aegean Blue Shipping Ltd","client company");
+        var supplierId = GetRequiredId(supplierIdsByName,"Piraeus Marine Supplies","supplier");
+
+        var intendedUsers = new List<ApplicationUser>
         {
             new()
             {
@@ -123,7 +149,8 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Admin",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.Admin,
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
@@ -131,7 +158,8 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Port Agent",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.PortAgent,
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
@@ -139,7 +167,8 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Documentation Officer",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.DocumentationOfficer,
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
@@ -147,7 +176,8 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Operations Manager",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.OperationsManager,
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
@@ -155,8 +185,9 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Supplier User",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.SupplierUser,
-                SupplierId = supplier.Id,
-                IsActive = true},
+                SupplierId = supplierId,
+                IsActive = true
+            },
 
             new()
             {
@@ -164,115 +195,148 @@ public static class DatabaseSeeder
                 DisplayName = "Demo Client User",
                 PasswordHash = "DEV_ONLY_PASSWORD_HASH_NOT_REAL",
                 Role = UserRole.ClientUser,
-                ClientCompanyId = clientCompany.Id,
-                IsActive = true}
+                ClientCompanyId = clientCompanyId,
+                IsActive = true
+            }
         };
 
-        dbContext.ApplicationUsers.AddRange(users);
-        await dbContext.SaveChangesAsync(cancellationToken);
-    }
+        var existingEmails = await dbContext.ApplicationUsers.AsNoTracking().Select(user => user.Email).ToListAsync(cancellationToken);
+        var existingEmailSet = existingEmails.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingUsers = intendedUsers.Where(user => !existingEmailSet.Contains(user.Email)).ToList();
 
-    private static async Task SeedServiceRequirementRulesAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
-    {
-        if (await dbContext.ServiceRequirementRules.AnyAsync(cancellationToken))
+        if (missingUsers.Count == 0)
         {
             return;
         }
 
-        var serviceTypes = await dbContext.ServiceTypes.ToDictionaryAsync(serviceType => serviceType.Code, cancellationToken);
+        dbContext.ApplicationUsers.AddRange(missingUsers);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
 
-        var rules = new List<ServiceRequirementRule>
+    private static async Task SeedServiceRequirementRulesAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
+    {
+        var serviceTypeRecords = await dbContext.ServiceTypes.AsNoTracking().Select(serviceType => new{serviceType.Id,serviceType.Code}).ToListAsync(cancellationToken);
+        var serviceTypeIdsByCode = serviceTypeRecords.ToDictionary(serviceType => serviceType.Code,serviceType => serviceType.Id,StringComparer.OrdinalIgnoreCase);
+
+        var intendedRules = new List<ServiceRequirementRule>
         {
             new()
             {
                 PortCallPurpose = PortCallPurpose.BunkerCall,
-                ServiceTypeId = serviceTypes["BUNKERING_COORDINATION"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"BUNKERING_COORDINATION","service type"),
                 RequirementLevel = ServiceRequirementLevel.Mandatory,
                 ReadinessImpact = ReadinessImpact.BlocksReadyToLeave,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 4,
                 Rationale = "Bunkering must be completed and confirmed before the vessel is ready to depart.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.WasteDisposal,
-                ServiceTypeId = serviceTypes["GARBAGE_REMOVAL"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"GARBAGE_REMOVAL","service type"),
                 RequirementLevel = ServiceRequirementLevel.Required,
                 ReadinessImpact = ReadinessImpact.BlocksClosure,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 2,
                 Rationale = "Waste services may block closure if unresolved.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.WasteDisposal,
-                ServiceTypeId = serviceTypes["WASTE_DECLARATION_CHECK"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"WASTE_DECLARATION_CHECK","service type"),
                 RequirementLevel = ServiceRequirementLevel.Mandatory,
                 ReadinessImpact = ReadinessImpact.BlocksClosure,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 2,
                 Rationale = "Waste declaration must be checked before final closure.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.CrewChange,
-                ServiceTypeId = serviceTypes["CREW_TRANSPORT"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"CREW_TRANSPORT","service type"),
                 RequirementLevel = ServiceRequirementLevel.Required,
                 ReadinessImpact = ReadinessImpact.WarningOnly,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 3,
                 Rationale = "Crew transport delays should be visible to operations staff.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.TechnicalCall,
-                ServiceTypeId = serviceTypes["TECHNICAL_INSPECTION"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"TECHNICAL_INSPECTION","service type"),
                 RequirementLevel = ServiceRequirementLevel.Mandatory,
                 ReadinessImpact = ReadinessImpact.BlocksClosure,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 2,
                 Rationale = "Mandatory technical attendance must be checked before closure.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.CargoOperation,
-                ServiceTypeId = serviceTypes["CARGO_OPERATION_STATUS"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"CARGO_OPERATION_STATUS","service type"),
                 RequirementLevel = ServiceRequirementLevel.Required,
                 ReadinessImpact = ReadinessImpact.WarningOnly,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 2,
                 Rationale = "Cargo operation progress should be visible before departure planning.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.SupplyCall,
-                ServiceTypeId = serviceTypes["FRESH_WATER_SUPPLY"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"FRESH_WATER_SUPPLY","service type"),
                 RequirementLevel = ServiceRequirementLevel.Required,
                 ReadinessImpact = ReadinessImpact.WarningOnly,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 3,
                 Rationale = "Fresh water supply should be tracked for supply-call readiness.",
-                IsActive = true},
+                IsActive = true
+            },
 
             new()
             {
                 PortCallPurpose = PortCallPurpose.SupplyCall,
-                ServiceTypeId = serviceTypes["PROVISIONS_SUPPLY"].Id,
+                ServiceTypeId = GetRequiredId(serviceTypeIdsByCode,"PROVISIONS_SUPPLY","service type"),
                 RequirementLevel = ServiceRequirementLevel.Recommended,
                 ReadinessImpact = ReadinessImpact.WarningOnly,
                 DeadlineAnchor = DeadlineAnchor.BeforeEtd,
                 DeadlineOffsetHours = 3,
                 Rationale = "Provisions delivery should be visible to operations staff.",
-                IsActive = true}
+                IsActive = true
+            }
         };
 
-        dbContext.ServiceRequirementRules.AddRange(rules);
+        var existingRuleRecords = await dbContext.ServiceRequirementRules.AsNoTracking().Select(rule => new{rule.PortCallPurpose,rule.ServiceTypeId}).ToListAsync(cancellationToken);
+        var existingRuleKeys = existingRuleRecords.Select(rule => (rule.PortCallPurpose, rule.ServiceTypeId)).ToHashSet();
+        var missingRules = intendedRules.Where(rule => !existingRuleKeys.Contains((rule.PortCallPurpose, rule.ServiceTypeId))).ToList();
+
+        if (missingRules.Count == 0)
+        {
+            return;
+        }
+
+        dbContext.ServiceRequirementRules.AddRange(missingRules);
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private static int GetRequiredId(IReadOnlyDictionary<string, int> idsByKey,string key,string entityDescription)
+    {
+        if (idsByKey.TryGetValue(key, out var id))
+        {
+            return id;
+        }
+
+        throw new InvalidOperationException($"The required {entityDescription} '{key}' was not found while seeding the database.");
     }
 }
