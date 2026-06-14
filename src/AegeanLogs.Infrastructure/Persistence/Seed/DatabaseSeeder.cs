@@ -10,6 +10,7 @@ public static class DatabaseSeeder
         await SeedPortsAsync(dbContext, cancellationToken);
         await SeedServiceTypesAsync(dbContext, cancellationToken);
         await SeedClientCompaniesAndVesselsAsync(dbContext, cancellationToken);
+        await SeedClientCompaniesAndVesselsAsync(dbContext, cancellationToken);
         await SeedSuppliersAsync(dbContext, cancellationToken);
         await SeedUsersAsync(dbContext, cancellationToken);
         await SeedServiceRequirementRulesAsync(dbContext, cancellationToken);
@@ -17,7 +18,11 @@ public static class DatabaseSeeder
 
     private static async Task SeedPortsAsync(AegeanLogsDbContext dbContext, CancellationToken cancellationToken)
     {
-        if (await dbContext.Ports.AnyAsync(cancellationToken))
+        var existingUnLocodes = await dbContext.Ports.AsNoTracking().Select(port => port.UnLocode).ToListAsync(cancellationToken);
+        var existingUnLocodeSet = existingUnLocodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingPorts = SeedData.Ports().Where(port=> !existingUnLocodeSet.Contains(port.UnLocode)).ToList();
+
+        if (missingPorts.Count == 0)
         {
             return;
         }
