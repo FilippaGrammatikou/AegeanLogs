@@ -6,9 +6,7 @@ namespace AegeanLogs.Infrastructure.Persistence.Seed;
 
 public static class DatabaseSeeder
 {
-    public static async Task SeedAsync(
-        AegeanLogsDbContext dbContext,
-        CancellationToken cancellationToken = default)
+    public static async Task SeedAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken = default)
     {
         await SeedPortsAsync(dbContext, cancellationToken);
         await SeedServiceTypesAsync(dbContext, cancellationToken);
