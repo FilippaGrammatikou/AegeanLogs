@@ -7,9 +7,7 @@ namespace AegeanLogs.Domain.Rules;
 
 public static class DocumentStatusRules
 {
-    public static bool CanMoveTo(
-        DocumentStatus currentStatus,
-        DocumentStatus nextStatus)
+    public static bool CanMoveTo(DocumentStatus currentStatus, DocumentStatus nextStatus)
     {
         return currentStatus switch
         {
