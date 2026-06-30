@@ -7,6 +7,7 @@ namespace AegeanLogs.Domain.Entities;
 public class ClientCompany
 {
     public int Id { get; set; }
+    public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string ContactEmail { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
