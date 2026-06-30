@@ -153,6 +153,7 @@ public static class SeedData
         [
             new ClientCompany
             {
+                Code = "AEGEAN_BLUE",
                 Name = "Aegean Blue Shipping Ltd",
                 ContactEmail = "ops@aegeanblue.example",
                 PhoneNumber = "+30 210 000 1001",
@@ -160,6 +161,7 @@ public static class SeedData
 
             new ClientCompany
             {
+                Code = "HELLENIC_BULK",
                 Name = "Hellenic Bulk Operators",
                 ContactEmail = "operations@hellenicbulk.example",
                 PhoneNumber = "+30 210 000 1002",
@@ -173,6 +175,7 @@ public static class SeedData
         [
             new Supplier
             {
+                Code = "PIRAEUS_MARINE_SUPPLIES",
                 Name = "Piraeus Marine Supplies",
                 ServiceCategory = ServiceCategory.VesselSupply,
                 ContactEmail = "dispatch@piraeusmarinesupplies.example",
@@ -181,6 +184,7 @@ public static class SeedData
 
             new Supplier
             {
+                Code = "ATTICA_WASTE_SERVICES",
                 Name = "Attica Waste Services",
                 ServiceCategory = ServiceCategory.WasteAndEnvironmental,
                 ContactEmail = "ops@atticawaste.example",
@@ -189,6 +193,7 @@ public static class SeedData
 
             new Supplier
             {
+                Code = "AEGEAN_CREW_TRANSPORT",
                 Name = "Aegean Crew Transport",
                 ServiceCategory = ServiceCategory.Crew,
                 ContactEmail = "booking@aegeancrewtransport.example",
@@ -197,6 +202,7 @@ public static class SeedData
 
             new Supplier
             {
+                Code = "HELLAS_TECHNICAL_MARINE",
                 Name = "Hellas Technical Marine",
                 ServiceCategory = ServiceCategory.Technical,
                 ContactEmail = "service@hellastechmarine.example",
