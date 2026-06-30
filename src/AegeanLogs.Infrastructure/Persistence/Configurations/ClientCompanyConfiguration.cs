@@ -12,6 +12,7 @@ public class ClientCompanyConfiguration : IEntityTypeConfiguration<ClientCompany
 
         builder.HasKey(clientCompany => clientCompany.Id);
 
+        builder.Property(clientCompany => clientCompany.Code).IsRequired().HasMaxLength(100);
         builder.Property(clientCompany => clientCompany.Name).IsRequired().HasMaxLength(150);
         builder.Property(clientCompany => clientCompany.ContactEmail).IsRequired().HasMaxLength(250);
         builder.Property(clientCompany => clientCompany.PhoneNumber).HasMaxLength(20);
