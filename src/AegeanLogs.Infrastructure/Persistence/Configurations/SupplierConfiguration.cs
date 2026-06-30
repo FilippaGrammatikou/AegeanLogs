@@ -11,11 +11,13 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
 
         builder.HasKey(supplier => supplier.Id);
 
+        builder.Property(supplier => supplier.Code).IsRequired().HasMaxLength(100);
         builder.Property(supplier => supplier.Name).IsRequired().HasMaxLength(200);
         builder.Property(supplier => supplier.ServiceCategory).IsRequired().HasConversion<string>().HasMaxLength(100);
         builder.Property(supplier => supplier.ContactEmail).IsRequired().HasMaxLength(256);
         builder.Property(supplier => supplier.PhoneNumber).HasMaxLength(20);
 
+        builder.HasIndex(supplier => supplier.Code).IsUnique();
         builder.HasIndex(supplier => supplier.Name).IsUnique();
         builder.HasIndex(supplier => supplier.ServiceCategory);
         builder.HasIndex(supplier => supplier.IsActive);
