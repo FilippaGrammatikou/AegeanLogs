@@ -16,7 +16,8 @@ public class ClientCompanyConfiguration : IEntityTypeConfiguration<ClientCompany
         builder.Property(clientCompany => clientCompany.Name).IsRequired().HasMaxLength(150);
         builder.Property(clientCompany => clientCompany.ContactEmail).IsRequired().HasMaxLength(250);
         builder.Property(clientCompany => clientCompany.PhoneNumber).HasMaxLength(20);
-        
+
+        builder.HasIndex(clientCompany => clientCompany.Code).IsUnique();
         builder.HasIndex(clientCompany => clientCompany.Name).IsUnique();
         builder.HasIndex(clientCompany => clientCompany.IsActive);
     }
