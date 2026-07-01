@@ -6,7 +6,7 @@ using System.Text;
 namespace AegeanLogs.Application.PortCalls.Create;
 public sealed class CreatePortCallRequest
 {
-    public int VessselId {  get; set; }
+    public int VesselId { get; set; }
     public int PortId { get; set; }
     public PortCallPurpose Purpose{ get; set; }
     public DateTimeOffset Eta { get; set; }
