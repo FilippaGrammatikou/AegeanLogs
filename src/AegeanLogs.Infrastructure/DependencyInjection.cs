@@ -16,9 +16,8 @@ public static class DependencyInjection
         }
 
         services.AddDbContext<AegeanLogsDbContext>(options =>options.UseSqlServer(connectionString));
-
         services.AddScoped<IAegeanLogsDbContext>(provider => provider.GetRequiredService<AegeanLogsDbContext>());
-
+        services.AddScoped<ITransactionManager, EfTransactionManager>();
         return services;
     }
 }
