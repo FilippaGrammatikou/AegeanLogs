@@ -49,9 +49,9 @@ public static class DatabaseSeeder
 
     private static async Task SeedClientCompaniesAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        var existingNames = await dbContext.ClientCompanies.AsNoTracking().Select(company => company.Name).ToListAsync(cancellationToken);
-        var existingNameSet = existingNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var missingCompanies = SeedData.ClientCompanies().Where(company => !existingNameSet.Contains(company.Name)).ToList();
+        var existingCodes = await dbContext.ClientCompanies.AsNoTracking().Select(company => company.Code).ToListAsync(cancellationToken);
+        var existingCodeSet = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingCompanies = SeedData.ClientCompanies().Where(company => !existingCodeSet.Contains(company.Code)).ToList();
 
         if (missingCompanies.Count == 0)
         {
@@ -64,10 +64,10 @@ public static class DatabaseSeeder
 
     private static async Task SeedVesselsAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        var companyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Name}).ToListAsync(cancellationToken);
-        var companyIdsByName = companyRecords.ToDictionary(company => company.Name,company => company.Id,StringComparer.OrdinalIgnoreCase);
-        var aegeanBlueCompanyId = GetRequiredId(companyIdsByName,"Aegean Blue Shipping Ltd","client company");
-        var hellenicBulkCompanyId = GetRequiredId(companyIdsByName,"Hellenic Bulk Operators","client company");
+        var companyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Code}).ToListAsync(cancellationToken);
+        var companyIdsByCode = companyRecords.ToDictionary(company => company.Code, company => company.Id,StringComparer.OrdinalIgnoreCase);
+        var aegeanBlueCompanyId = GetRequiredId(companyIdsByCode, "AEGEAN_BLUE", "client company");
+        var hellenicBulkCompanyId = GetRequiredId(companyIdsByCode, "HELLENIC_BULK", "client company");
 
         var intendedVessels = new List<Vessel>
         {
@@ -117,9 +117,9 @@ public static class DatabaseSeeder
 
     private static async Task SeedSuppliersAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        var existingNames = await dbContext.Suppliers.AsNoTracking().Select(supplier => supplier.Name).ToListAsync(cancellationToken);
-        var existingNameSet = existingNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var missingSuppliers = SeedData.Suppliers().Where(supplier => !existingNameSet.Contains(supplier.Name)).ToList();
+        var existingCodes = await dbContext.Suppliers.AsNoTracking().Select(supplier => supplier.Code).ToListAsync(cancellationToken);
+        var existingCodeSet = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingSuppliers = SeedData.Suppliers().Where(supplier => !existingCodeSet.Contains(supplier.Code)).ToList();
 
         if (missingSuppliers.Count == 0)
         {
@@ -132,12 +132,12 @@ public static class DatabaseSeeder
 
     private static async Task SeedUsersAsync(AegeanLogsDbContext dbContext,CancellationToken cancellationToken)
     {
-        var clientCompanyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Name}).ToListAsync(cancellationToken);
-        var clientCompanyIdsByName = clientCompanyRecords.ToDictionary(company => company.Name,company => company.Id,StringComparer.OrdinalIgnoreCase);
-        var supplierRecords = await dbContext.Suppliers.AsNoTracking().Select(supplier => new{supplier.Id,supplier.Name}).ToListAsync(cancellationToken);
-        var supplierIdsByName = supplierRecords.ToDictionary(supplier => supplier.Name,supplier => supplier.Id,StringComparer.OrdinalIgnoreCase);
-        var clientCompanyId = GetRequiredId(clientCompanyIdsByName,"Aegean Blue Shipping Ltd","client company");
-        var supplierId = GetRequiredId(supplierIdsByName,"Piraeus Marine Supplies","supplier");
+        var clientCompanyRecords = await dbContext.ClientCompanies.AsNoTracking().Select(company => new{company.Id,company.Code}).ToListAsync(cancellationToken);
+        var clientCompanyIdsByCode = clientCompanyRecords.ToDictionary(company => company.Code,company => company.Id,StringComparer.OrdinalIgnoreCase);
+        var supplierRecords = await dbContext.Suppliers.AsNoTracking().Select(supplier => new{supplier.Id,supplier.Code }).ToListAsync(cancellationToken);
+        var supplierIdsByCode = supplierRecords.ToDictionary(supplier => supplier.Code,supplier => supplier.Id,StringComparer.OrdinalIgnoreCase);
+        var clientCompanyId = GetRequiredId(clientCompanyIdsByCode, "AEGEAN_BLUE", "client company");
+        var supplierId = GetRequiredId(supplierIdsByCode, "PIRAEUS_MARINE_SUPPLIES", "supplier");
 
         var intendedUsers = new List<ApplicationUser>
         {
