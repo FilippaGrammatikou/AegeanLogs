@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AegeanLogs.Application.PortCalls;
+namespace AegeanLogs.Application.PortCalls.Create;
 public sealed class CreatePortCallRequest
 {
     public int VessselId {  get; set; }
