@@ -35,7 +35,6 @@ public sealed class CreatePortCallService
         return await _transactionManager.ExecuteAsync(async transactionCancellationToken =>
         {
             var vessel = await _dbContext.Vessels.AsNoTracking().SingleOrDefaultAsync(vessel => vessel.Id == request.VesselId, transactionCancellationToken);
-
             if (vessel is null)
             {
                 throw new NotFoundException($"Vessel with ID {request.VesselId} was not found.");
@@ -47,7 +46,6 @@ public sealed class CreatePortCallService
             }
 
             var port = await _dbContext.Ports.AsNoTracking().SingleOrDefaultAsync(port => port.Id == request.PortId, transactionCancellationToken);
-
             if (port is null)
             {
                 throw new NotFoundException($"Port with ID {request.PortId} was not found.");
@@ -59,7 +57,6 @@ public sealed class CreatePortCallService
             }
 
             var assignedAgent = await _dbContext.ApplicationUsers.AsNoTracking().SingleOrDefaultAsync(user => user.Id == request.AssignedAgentUserId, cancellationToken);
-
             if (assignedAgent is null)
             {
                 throw new NotFoundException($"User with ID {request.AssignedAgentUserId} was not found.");
