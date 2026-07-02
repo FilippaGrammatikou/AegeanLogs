@@ -9,6 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<IValidator<CreatePortCallRequest>, CreatePortCallValidator>();
+        services.AddScoped<CreatePortCallService>();
         return services;
     }
 }
