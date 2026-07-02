@@ -4,12 +4,17 @@ using AegeanLogs.Infrastructure;
 using AegeanLogs.Infrastructure.Persistence;
 using AegeanLogs.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
