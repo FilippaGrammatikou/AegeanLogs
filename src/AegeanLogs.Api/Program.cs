@@ -1,3 +1,4 @@
+using AegeanLogs.Api.Middleware;
 using AegeanLogs.Application;
 using AegeanLogs.Infrastructure;
 using AegeanLogs.Infrastructure.Persistence;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
