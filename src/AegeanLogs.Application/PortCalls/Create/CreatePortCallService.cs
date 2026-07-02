@@ -7,6 +7,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ApplicationValidationException =AegeanLogs.Application.Common.Exceptions.ValidationException;
 
+//creation of portcall,validtion of the supplied info & verifying referenced db records are suitable
 namespace AegeanLogs.Application.PortCalls.Create;
 public sealed class CreatePortCallService
 {
