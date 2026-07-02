@@ -8,19 +8,20 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
-
+app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
     using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<AegeanLogsDbContext>();
+    var dbContext =scope.ServiceProvider.GetRequiredService<AegeanLogsDbContext>();
     await dbContext.Database.MigrateAsync();
     await DatabaseSeeder.SeedAsync(dbContext);
 }
-
 app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
