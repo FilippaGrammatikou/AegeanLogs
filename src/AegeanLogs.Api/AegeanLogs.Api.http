@@ -1,6 +1,57 @@
-@AegeanLogs.Api_HostAddress = http://localhost:5254
+@AegeanLogs_Api_HostAddress = http://localhost:5254
 
-GET {{AegeanLogs.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Create a valid port call
+POST {{AegeanLogs_Api_HostAddress}}/api/port-calls
+Content-Type: application/json
 
-###
+{
+  "vesselId": 1,
+  "portId": 1,
+  "purpose": "SupplyCall",
+  "eta": "2026-07-10T08:00:00+03:00",
+  "etd": "2026-07-11T18:00:00+03:00",
+  "assignedAgentUserId": 2,
+  "notes": "Fresh water and provisions requested."
+}
+
+### Invalid request: ETD is before ETA
+POST {{AegeanLogs_Api_HostAddress}}/api/port-calls
+Content-Type: application/json
+
+{
+  "vesselId": 1,
+  "portId": 1,
+  "purpose": "SupplyCall",
+  "eta": "2026-07-12T18:00:00+03:00",
+  "etd": "2026-07-11T08:00:00+03:00",
+  "assignedAgentUserId": 2,
+  "notes": "This request should fail validation."
+}
+
+### Missing vessel
+POST {{AegeanLogs_Api_HostAddress}}/api/port-calls
+Content-Type: application/json
+
+{
+  "vesselId": 999999,
+  "portId": 1,
+  "purpose": "SupplyCall",
+  "eta": "2026-07-10T08:00:00+03:00",
+  "etd": "2026-07-11T18:00:00+03:00",
+  "assignedAgentUserId": 2,
+  "notes": "This request should return not found."
+}
+
+### Wrong assigned-agent role
+POST {{AegeanLogs_Api_HostAddress}}/api/port-calls
+Content-Type: application/json
+
+{
+  "vesselId": 1,
+  "portId": 1,
+  "purpose": "SupplyCall",
+  "eta": "2026-07-10T08:00:00+03:00",
+  "etd": "2026-07-11T18:00:00+03:00",
+  "assignedAgentUserId": 1,
+  "notes": "This request should fail because user 1 is an Admin."
+}
