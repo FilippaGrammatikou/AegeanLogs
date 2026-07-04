@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using AegeanLogs.Domain.Enums;
-using System.Text;
 
 namespace AegeanLogs.Domain.Entities;
-
 public class ApplicationUser
 {
     public int Id { get; set; }
