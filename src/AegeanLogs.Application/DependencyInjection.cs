@@ -1,4 +1,5 @@
 using AegeanLogs.Application.PortCalls.Create;
+using AegeanLogs.Application.PortCalls.GetById;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IValidator<CreatePortCallRequest>, CreatePortCallValidator>();
         services.AddScoped<CreatePortCallService>();
+        services.AddScoped<GetPortCallByIdService>();
         return services;
     }
 }
